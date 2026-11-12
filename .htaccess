@@ -1,0 +1,19 @@
+# Verde por Verde – endurecimiento básico (Apache de XAMPP)
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set Permissions-Policy "camera=(self), microphone=(), geolocation=()"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+  # La página, el JS y la API nunca se guardan en caché: al darle "atrás" después de cerrar sesión se vuelve a pedir al servidor
+  <FilesMatch "\.(html|php|js)$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+  </FilesMatch>
+</IfModule>
+
+# Nadie puede descargar la base de datos desde el navegador
+<FilesMatch "\.(sql|htaccess)$">
+  Require all denied
+</FilesMatch>
